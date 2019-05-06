@@ -13,9 +13,13 @@
 </template>
 
 <script>
+import {Mixin} from '../../mixin'
+
 export default {
+    mixins:[Mixin],
     created() {
-        userState.check()
+//        userState.check()
+        this.check_userState(this.sysConst.STORAGE_KEY_userData, this)
     },
     data() {
         return {
@@ -34,7 +38,8 @@ export default {
                 console.log(res.data.content);
 //                var arr={message : '登録が完了しました。'}
                 var arr=[{message : '登録が完了しました。'}]
-                exStorage.save( sysConst.STORAGE_KEY_flash, arr )
+//                exStorage.save( sysConst.STORAGE_KEY_flash, arr )
+                this.set_exStorage(this.sysConst.STORAGE_KEY_flash, arr)
                 window.location.href='/tasks'
 //                    exStorage.save( sysConst.STORAGE_KEY_flash, 'complete , add' )
             });

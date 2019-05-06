@@ -10,7 +10,10 @@
 </template>
 
 <script>
+import {Mixin} from '../../mixin'
+
 export default {
+    mixins:[Mixin],
     created() {
         this.load_msg()
     },
@@ -21,13 +24,14 @@ export default {
     },
     methods: {
         load_msg() {
-            var dat = exStorage.load( sysConst.STORAGE_KEY_flash )
+//            var dat = exStorage.load( sysConst.STORAGE_KEY_flash )
+            var dat = this.get_exStorage( this.sysConst.STORAGE_KEY_flash )
             if(dat.length > 0){
                 this.message =dat[0].message;
 //                console.log( dat[0] )
             }
-            exStorage.remove( sysConst.STORAGE_KEY_flash )
-//                console.log(sysConst.STORAGE_KEY_flash )
+            this.remove_exStorage(this.sysConst.STORAGE_KEY_flash)
+//            exStorage.remove( sysConst.STORAGE_KEY_flash )
         }            
     }
 }

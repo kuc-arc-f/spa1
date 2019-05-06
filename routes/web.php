@@ -10,25 +10,37 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-//
-//Route::post('/depts/store', 'DeptsController@store');
-//Route::get('/depts/create', 'DeptsController@create');
-//Route::get('/depts/test', 'DeptsController@test');
+use App\Libs\AppConst;
+use App\Libs\LoginState;
 
 //Route::resource('employees', 'EmployeesController');
-//Route::get('depts/test', 'DeptsController@test');
 //Route::resource('depts', 'DeptsController');
 Route::prefix('api')->group(function(){
-//    Route::resource('depts', 'DeptsController', ['only'=>['index', 'store', 'create' ]]);
+    /* employees */
+    Route::post('employees/store', 'EmployeesController@store');
     /* depts */
     Route::get('depts/index', 'DeptsController@index');
     Route::post('depts/store', 'DeptsController@store');
+    Route::post('depts/update/{id}', 'DeptsController@update');
     Route::get('depts/show/{id}', 'DeptsController@show');
+    Route::get('depts/edit/{id}', 'DeptsController@edit');
+    Route::get('depts/destroy/{id}', 'DeptsController@destroy');
     Route::get('depts/test', 'DeptsController@test');
+    // users
+    Route::post('users/auth',  function(Request $request) {
+        $const = new AppConst;
+        $ret=$const->NG_CODE;
+        $email   = request('email');
+        $password= request('password');
+//var_dump( $password );
+        $query = App\User::query();
+        $query->where('email', $email);
+        $user = $query->first();
+        if (Hash::check($password, $user->password)) {
+            $ret= $const->OK_CODE;
+        }
+        return ['ret'=>$ret,'user'=> $user ];
+    });
     //
     Route::get('tasks',  function() {
         $tasks = App\Task::orderBy('id', 'desc')->get();

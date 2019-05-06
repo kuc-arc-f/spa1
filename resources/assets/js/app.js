@@ -33,6 +33,7 @@ const router = new VueRouter({
        { path: '/depts'              , component: require('./components/Depts/Index.vue') },
        { path: '/depts/new/'         , component: require('./components/Depts/new.vue') },
        { path: '/depts/show/:id'     , component: require('./components/Depts/show.vue') },
+       { path: '/depts/edit/:id'     , component: require('./components/Depts/edit.vue') },
     ]
 });
 

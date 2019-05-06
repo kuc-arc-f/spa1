@@ -14,7 +14,14 @@ class EmployeesController extends Controller
     public function index()
     {
         $employees = Employee::orderBy('updated_at', 'desc')->get();
-        return view('employees/index')->with('employees', $employees );
+        $dat = array();
+        foreach ($employees as $employee ){
+            $item = $employee;
+            $item["dept_name"] = $employee->dept->name;
+            $dat[] = $item;
+//            var_dump($employee->dept->name );
+        }
+        return view('employees/index')->with('employees', $dat );
     }
     //
     //
@@ -29,9 +36,12 @@ class EmployeesController extends Controller
 //var_dump($request->all() );
 //exit();
         $employee = new Employee();
-        $employee->fill($request->all());
+        $employee->name   = request('name');
+        $employee->dept_id = request('dept_id');
+//        $employee->fill($request->all());
         $employee->save();
 //exit();
-        return redirect()->route('employees.index');
+        return ['name' => request('name')];
+//        return redirect()->route('employees.index');
     }
 }

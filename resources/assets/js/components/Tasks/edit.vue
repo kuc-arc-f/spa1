@@ -1,23 +1,29 @@
 <template lang="html">
     <div class="container">
-            <div class="form-group">
-                <label for="TopicTitle">タイトル</label>
-                <input type="text" class="form-control" id="title" v-model="title" >
-            </div>
-            <div class="form-group">
-                <label for="TopicContent">content</label>
-                <textarea class="form-control" id="content" rows="3" v-model="content"></textarea>
-            </div>
-            <button v-on:click="postTask">投稿</button>
-            <hr />
-            <button v-on:click="destroyTask">削除</button>
+        <h1>Tasks - edit</h1>
+        <hr />
+        <div class="form-group">
+            <label for="TopicTitle">タイトル</label>
+            <input type="text" class="form-control" id="title" v-model="title" >
+        </div>
+        <div class="form-group">
+            <label for="TopicContent">content</label>
+            <textarea class="form-control" id="content" rows="3" v-model="content"></textarea>
+        </div>
+        <button v-on:click="postTask">投稿</button>
+        <hr />
+        <button v-on:click="destroyTask">削除</button>
     </div>
 </template>
 
 <script>
+import {Mixin} from '../../mixin'
+
 export default {
+    mixins:[Mixin],
     created() {
-        userState.check()
+        this.check_userState(this.sysConst.STORAGE_KEY_userData, this)
+//        userState.check()
     },
     data() {
         return {
@@ -47,7 +53,8 @@ export default {
                 console.log(res.data.title);
                 console.log(res.data.content);
                 var arr=[{message : '更新が完了しました。'}]
-                exStorage.save( sysConst.STORAGE_KEY_flash, arr )
+                this.set_exStorage(this.sysConst.STORAGE_KEY_flash, arr)
+//                exStorage.save( sysConst.STORAGE_KEY_flash, arr )
                 window.location.href='/tasks'
             });
         },
@@ -56,7 +63,8 @@ export default {
                 console.log(res.data );
                 if(res.data.ret==1){
                     var arr=[{message : '削除が完了しました。'}]
-                    exStorage.save( sysConst.STORAGE_KEY_flash, arr )
+                    this.set_exStorage(this.sysConst.STORAGE_KEY_flash, arr)
+//                    exStorage.save( sysConst.STORAGE_KEY_flash, arr )
                     window.location.href='/tasks'
                 }
             });

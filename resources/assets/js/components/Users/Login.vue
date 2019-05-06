@@ -14,37 +14,41 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                email:'',
-                password:'',
-                store:  [],
-                user:   []
-            }
-        },
-        mounted: function() {
-        },
-        methods: {
-            postLogin(){
-                var user = {
-                    'email': this.email,
-                    'password': this.password
-                };
-                axios.post('/api/users/auth/' ,user).then(res => {
-                    console.log(res.data );
-                    if(res.data.ret==1){
-                        this.user = res.data.user
-                        this.store.push({
-                            id: this.user.id
-                        })
-                        myStorage.save( this.store )
-                        window.location.href='/'
-                    }else{
-                        console.log('#-NG-auth');
-                    }
-                });
-            }
+import {Mixin} from '../../mixin'
+
+export default {
+    mixins:[Mixin],
+    data() {
+        return {
+            email:'',
+            password:'',
+            store:  [],
+            user:   []
+        }
+    },
+    mounted: function() {
+    },
+    methods: {
+        postLogin(){
+            var user = {
+                'email': this.email,
+                'password': this.password
+            };
+            axios.post('/api/users/auth/' ,user).then(res => {
+                console.log(res.data );
+                if(res.data.ret==1){
+                    this.user = res.data.user
+                    this.store.push({
+                        id: this.user.id
+                    })
+                    this.set_exStorage(this.sysConst.STORAGE_KEY_userData, this.store)
+                    //myStorage.save( this.store )
+                    window.location.href='/'
+                }else{
+                    console.log('#-NG-auth');
+                }
+            });
         }
     }
+}
 </script>

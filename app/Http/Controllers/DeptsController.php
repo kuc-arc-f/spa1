@@ -10,16 +10,10 @@ use App\Libs\mylibs;
 //
 class DeptsController extends Controller
 {
-    /*
     public function index()
     {
-        $depts = Dept::orderBy('updated_at', 'desc')->get();
-        return view('depts/index')->with('depts', $depts );
-    }
-    */
-    public function index()
-    {
-        $depts = Dept::orderBy('updated_at', 'desc')->get();
+//        $depts = Dept::orderBy('updated_at', 'desc')->get();
+        $depts = Dept::orderBy('id', 'desc')->get();
         $dat = array();
         foreach ($depts as $dept ){
             $item = $dept;
@@ -27,9 +21,8 @@ class DeptsController extends Controller
             $dat[] = $item;
         }
         return response()->json($dat);
-//        return ['ret'=>0,'user'=>0 ];
     }
-
+    //
     public function create()
     {
         return view('depts/create')->with('dept', new Dept());
@@ -38,27 +31,41 @@ class DeptsController extends Controller
     public function store(Request $request )
     {
         $dept = new Dept();
-//        $dept->fill($request->all());
         $dept->name   = request('name');
         $dept->save();
-//        return redirect()->route('depts.index');
         return ['name' => request('name')];
     }
     //
     public function show($id ){
-//        var_dump($id);
         $dept = Dept::find($id);
+        $dept["employees"] = $dept->employees;
         return $dept;
     }
     //
+    public function edit($id ){
+        $dept = Dept::find($id);
+        $dept["employees"] = $dept->employees;
+        return $dept;
+    }
+    //
+    public function update($id ){
+        $dept = Dept::find($id);
+        $dept->name   = request('name');
+        $dept->save();
+        return ['name' => request('name')];
+    }    
+    //
+    public function destroy($id ){
+        $dept = Dept::find($id);
+        $dept->delete();
+        return ['ret'=>"1"  ];
+    }
+
     public function test()
     {
         $arr = array('d1'=> 1,
 		'd2'=> 2
         );
-//        $lib = new mylibs();
-//$lib->arr_dump($arr );
-//exit();
         $depts = Dept::orderBy('updated_at', 'desc')->get();
 //var_dump( $depts );
         foreach($depts as $dept )
@@ -66,16 +73,8 @@ class DeptsController extends Controller
             foreach($dept->employees as $employee ){
                 echo "&nbsp; emp-name=". $employee->name."<br />";
             }
-/*
-            echo("#dept= " . $dept->name . "<br />");
-            $employees = $dept->employees;
-            foreach($employees as $employee)
-            {
-                echo "&nbsp; emp-name=". $employee->name."<br />";
-            }            
-*/    
         }
-exit();
+        exit();
     }
 
 

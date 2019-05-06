@@ -1,66 +1,85 @@
 <template lang="html">
     <div class="container">
-            <div class="form-group">
-                <label for="TopicTitle">タイトル</label>
-                <input type="text" class="form-control" id="title" v-model="title" >
-            </div>
-            <div class="form-group">
-                <label for="TopicContent">content</label>
-                <textarea class="form-control" id="content" rows="3" v-model="content"></textarea>
-            </div>
-            <button v-on:click="postTask">投稿</button>
-            <hr />
-            <button v-on:click="destroyTask">削除</button>
+        <h1>Dept - edit</h1>
+        <div class="form-group">
+            <label for="lbl_name">name</label>
+            <input type="text" class="form-control" id="name" v-model="name" >
+        </div>
+        <button v-on:click="postDept">更新</button><br />
+        <br />
+        <button v-on:click="destroyTask">削除</button>
+        <hr />
+        <h3>employees :</h3>
+        <div v-for="employee in item.employees" v-bind:key="employee.id">
+            <p>employee : {{ employee.id }} : {{ employee.name }}</p>
+        </div>
+        <hr />
+        <h3>employees -add:</h3>
+        <div class="form-group">
+            <label for="lbl_name">name</label>
+            <input type="text" class="form-control" id="employee_name" v-model="employee_name" >
+        </div>
+        <button v-on:click="postEmployee">employee - add</button><br />
+        <br />
     </div>
 </template>
 
 <script>
 export default {
     created() {
-        userState.check()
+//        userState.check()
     },
     data() {
         return {
-            title:'',
-            content:''
+            name:'',
+            item: [],
+            employee_name: '',
         }
     },
     mounted: function() {
         this.getItem();
     },
-    // メソッドの定義。ここでv-on:click=''で記述したpostArticle()メソッドを定義します
     methods: {
         getItem: function() {
-            axios.get('/api/tasks/edit/' + this.$route.params.id)
+            axios.get('/api/depts/edit/' + this.$route.params.id)
             .then( ( res ) => {
                 this.item = res.data;
-                this.title   =this.item.title;
-                this.content =this.item.content;
+                this.name   =this.item.name;
             });
         },
-        postTask(){
-            var task = {
-                'title': this.title,
-                'content': this.content
+        postDept(){
+            var item = {
+                'name': this.name,
             };
-            axios.post('/api/tasks/update/'+ this.$route.params.id ,task).then(res => {
-                console.log(res.data.title);
-                console.log(res.data.content);
+            axios.post('/api/depts/update/'+ this.$route.params.id ,item).then(res => {
+                console.log(res.data );
                 var arr=[{message : '更新が完了しました。'}]
                 exStorage.save( sysConst.STORAGE_KEY_flash, arr )
-                window.location.href='/tasks'
+                window.location.href='/depts'
             });
         },
         destroyTask(){
-            axios.get('/api/tasks/destroy/'+ this.$route.params.id  ).then(res => {
+            axios.get('/api/depts/destroy/'+ this.$route.params.id  ).then(res => {
                 console.log(res.data );
                 if(res.data.ret==1){
                     var arr=[{message : '削除が完了しました。'}]
                     exStorage.save( sysConst.STORAGE_KEY_flash, arr )
-                    window.location.href='/tasks'
+                    window.location.href='/depts'
                 }
             });
-        }
+        },
+        postEmployee(){
+            var item = {
+                'name': this.employee_name,
+                'dept_id': this.$route.params.id,
+            };
+            axios.post('/api/employees/store/' , item).then(res => {
+                console.log(res.data );
+                var arr=[{message : '更新が完了しました。'}]
+                exStorage.save( sysConst.STORAGE_KEY_flash, arr )
+                window.location.href='/depts'
+            });
+        },        
     }
 }
 </script>

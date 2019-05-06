@@ -21,9 +21,13 @@
 </template>
 
 <script>
+import {Mixin} from '../../mixin'
+
 export default {
+    mixins:[Mixin],
     created() {
-        userState.check()
+        this.check_userState(this.sysConst.STORAGE_KEY_userData, this)
+//        userState.check()
     },
     data: function( ) {
         return {

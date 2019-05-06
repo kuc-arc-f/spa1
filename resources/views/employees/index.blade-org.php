@@ -26,7 +26,8 @@
                                 {{ link_to_route('employees.show', $employee->name, $employee->id) }}
                             </td>
                             <td class="table-text">
-                                {{ $employee->dept_name }}
+                                <?php $dept  = $employee->dept; ?>
+                                {{ $dept->name }}
                             </td>
                             <td class="table-text">
                                 {{ link_to_route('employees.edit', '編集', $employee->id, ['class' => 'btn btn-sm btn-default']) }}

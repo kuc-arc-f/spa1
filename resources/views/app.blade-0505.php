@@ -21,6 +21,7 @@
                 <router-view></router-view>
             </div>
         </div>
+        <script src="/js/my_storage.js?{{ time() }}"></script>
         <script src="{{ mix('js/app.js') }}?{{ time() }}"></script>
     </body>
 </html>

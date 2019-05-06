@@ -2,31 +2,43 @@
     <div>
         <flash-message></flash-message>
         <h1>Depts - Index:</h1>
-        <hr />
-        <router-link :to="'/depts/new/'">[ add ]</router-link>
+        <br />
+        <router-link :to="'/depts/new/'" class="btn btn-primary">Add</router-link>
+        <!--
         <hr />
         <br />
-        <div v-for="item in items" v-bind:key="item.id">
-            <p>ID : {{ item.id }}</p>
-            <h1>
-                <router-link :to="'/depts/show/' + item.id">{{ item.name }}</router-link>
-            </h1>
-            <div v-for="employee in item.employees" v-bind:key="employee.id">
+        -->
+        <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Employee</th>
+            <th>Action</th>
+        </thead>
+        <tbody v-for="item in items" v-bind:key="item.id">
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>
+                <h3><router-link :to="'/depts/show/' + item.id">{{ item.name }}</router-link>
+                </h3>
+            </td>
+            <td>
+                <div v-for="employee in item.employees" v-bind:key="employee.id">
                 <p>employee : {{ employee.id }} : {{ employee.name }}</p>
-            </div>
-            <p>
-                {{ item.content }}
-                <router-link :to="'/tasks/edit/' + item.id">[ edit ]</router-link>
-            </p>
-            <hr />
-        </div>
+                </div>
+            </td>
+            <td>
+                <router-link :to="'/depts/edit/' + item.id" class="btn btn-outline-primary">edit</router-link>
+            </td>
+        </tr>
+        </tbody>
+        </table>
     </div>
 </template>
 
 <script>
 export default {
     created() {
-//        userState.check()
         this.getItems()
     },
     data() {

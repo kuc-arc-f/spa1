@@ -1,29 +1,42 @@
 <template>
     <div>
         <flash-message></flash-message>
-        <h1>Index:</h1>
+        <h1>Tasks- index:</h1>
         <hr />
-        <router-link :to="'/tasks/new/'">[ add ]</router-link>
-        <hr />
-        <br />
-        <div v-for="task in tasks" v-bind:key="task.id">
-            <p>ID : {{ task.id }}</p>
-            <h1>
-                <router-link :to="'/tasks/show/' + task.id">{{ task.title }}</router-link>
-            </h1>
-            <p>
-                {{ task.content }}
-                <router-link :to="'/tasks/edit/' + task.id">[ edit ]</router-link>
-            </p>
-            <hr />
-        </div>
+        <router-link :to="'/tasks/new/'" class="btn btn-primary">Add</router-link>
+        <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Content</th>
+            <th>Action</th>
+        </thead>
+        <tbody v-for="task in tasks" v-bind:key="task.id">
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>
+                <h3><router-link :to="'/tasks/show/' + task.id">{{ task.title }}</router-link>
+                </h3>
+            </td>
+            <td>{{ task.content }}</td>
+            <td>
+                <router-link :to="'/tasks/edit/' + task.id" class="btn btn-outline-primary">edit</router-link>
+            </td>
+        </tr>
+        </tbody>
+        </table>    
     </div>
 </template>
 
 <script>
+import {Mixin} from '../../mixin'
+
 export default {
+    mixins:[Mixin],
     created() {
-        userState.check()
+//        console.log(this.sysConst.STORAGE_KEY_userData)
+        this.check_userState(this.sysConst.STORAGE_KEY_userData, this)
+        //userState.check()
         this.getTasks()
     },
     data() {

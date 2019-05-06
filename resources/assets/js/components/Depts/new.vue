@@ -12,7 +12,7 @@
 <script>
 export default {
     created() {
-        userState.check()
+        //userState.check()
     },
     data() {
         return {
